@@ -11,15 +11,21 @@ import Foundation
 struct SetGame {
     var deck = [Card]()
     var selectedCards = [Card]()
-    var cardsShowingOnTable = [Card]()
+    var playingCards = [Card]()
     
 //    func isASet() -> Bool{
 //
 //    }
 //
-//    func dealThreeMoreCards() {
-//
-//    }
+    
+    mutating func pickCards(numberOfCards: Int) {
+        for _ in 1...numberOfCards {
+            if deck.count > 0{
+                playingCards.append(deck.popLast()!)
+            }
+        }
+    }
+    
 //
 //    func chooseCard() {
 //
@@ -40,11 +46,7 @@ struct SetGame {
         //shuffle cards within deck
         deck.shuffle()
         //pick the first 12 cards to show on view
-        for _ in 1...12 {
-            if deck.count > 0{
-                cardsShowingOnTable.append(deck.popLast()!)
-            }
-        }
+        pickCards(numberOfCards: 12)
     }
 }
 
