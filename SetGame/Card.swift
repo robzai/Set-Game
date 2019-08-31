@@ -20,14 +20,11 @@ struct Card: Hashable {
     //eg. red, green, or purple
     private(set) var color: Color
     
-    var isMached: Bool = false
-    
     init(numberOfShapes: Int, shape: Shape, shading: Shading, color: Color) {
         self.numberOfShapes = numberOfShapes
         self.shape = shape
         self.shading = shading
         self.color = color
-        self.isMached = false
     }
     
     func hash(into hasher: inout Hasher) {

@@ -25,13 +25,21 @@ class ViewController: UIViewController {
             if index < setGame.playingCards.count {
                 cardButtons[index].setAttributedTitle(contentOfCard(setGame.playingCards[index]), for: .normal)
                 cardButtons[index].backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+                //handle selection
+                if let _ = setGame.selectedCards.index(forKey: index) {
+                    cardButtons[index].layer.borderWidth = 3.0
+                } else {
+                    cardButtons[index].layer.borderWidth = 0.0
+                }
             } else {
                 cardButtons[index].setTitle(nil, for: UIControl.State.normal)
                 cardButtons[index].setAttributedTitle(nil, for: UIControl.State.normal)
                 cardButtons[index].backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
             }
             cardButtons[index].layer.cornerRadius = 8.0
+            cardButtons[index].layer.borderColor = UIColor.blue.cgColor
         }
+        //handle moreCardButton
         if setGame.playingCards.count < 24 && setGame.deck.count > 0{
             moreCardsButton.isEnabled = true
             moreCardsButton.backgroundColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
@@ -41,7 +49,12 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func touchCatd(_ sender: UIButton) {
+    @IBAction func touchCard(_ sender: UIButton) {
+        if let cardNumber = cardButtons.firstIndex(of: sender){
+            setGame.chooseCard(at: cardNumber)
+        }
+        updateView()
+        print("\(setGame.selectedCards.count)")
     }
     
     
