@@ -11,7 +11,7 @@ import Foundation
 struct SetGame {
     var deck = [Card]()
     var selectedCards = Dictionary<Int,Card>()
-    var playingCards = [Card]()
+    var playingCards = [Card?]()
     //When the deck of Set cards runs out, successfully matched cards can no longer be replaced with new cards. Those un-replaced matched cards can’t appear in the UI. For this reason, your Model’s API will have to reveal which cards have already been successfully matched.
     var matchedCards = [Card]()
     
@@ -27,19 +27,22 @@ struct SetGame {
         matchedCards.append(cardOne.value)
         matchedCards.append(cardTwo.value)
         matchedCards.append(cardThree.value)
-        playingCards.remove(at: cardOne.key)
-        if let newCard = deck.popLast() {
-            playingCards.insert(newCard, at: cardOne.key)
-        }
-        playingCards.remove(at: cardTwo.key)
-        if let newCard = deck.popLast() {
-            playingCards.insert(newCard, at: cardTwo.key)
-        }
-        playingCards.remove(at: cardThree.key)
-        if let newCard = deck.popLast() {
-            playingCards.insert(newCard, at: cardThree.key)
-        }
         
+        if let newCard = deck.popLast() {
+            playingCards[cardOne.key] = newCard
+        } else {
+            playingCards[cardOne.key] = nil
+        }
+        if let newCard = deck.popLast() {
+            playingCards[cardTwo.key] = newCard
+        } else {
+            playingCards[cardTwo.key] = nil
+        }
+        if let newCard = deck.popLast() {
+            playingCards[cardThree.key] = newCard
+        } else {
+            playingCards[cardThree.key] = nil
+        }
     }
     
     mutating func isSelectedCardsASet() -> Bool{

@@ -23,8 +23,13 @@ class ViewController: UIViewController {
     func updateView() {
         for index in 0..<cardButtons.count {
             if index < setGame.playingCards.count {
-                cardButtons[index].setAttributedTitle(contentOfCard(setGame.playingCards[index]), for: .normal)
-                cardButtons[index].backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+                if let card: Card = setGame.playingCards[index] {
+                    cardButtons[index].setAttributedTitle(contentOfCard(card), for: .normal)
+                    cardButtons[index].backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+                } else {
+                    //hendle if the deck is empty then matched cards can’t be replaced, but they should be hidden in the UI.
+                    cardButtons[index].hidden()
+                }
                 //handle selection
                 if let _ = setGame.selectedCards.index(forKey: index) {
                     cardButtons[index].layer.borderWidth = 3.0
@@ -32,9 +37,7 @@ class ViewController: UIViewController {
                     cardButtons[index].layer.borderWidth = 0.0
                 }
             } else {
-                cardButtons[index].setTitle(nil, for: UIControl.State.normal)
-                cardButtons[index].setAttributedTitle(nil, for: UIControl.State.normal)
-                cardButtons[index].backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+                cardButtons[index].hidden()
             }
             cardButtons[index].layer.cornerRadius = 8.0
             cardButtons[index].layer.borderColor = UIColor.blue.cgColor
@@ -117,5 +120,13 @@ class ViewController: UIViewController {
         setGame.pickCards(numberOfCards: 3)
         //check if 3 selected cards are match, if 3 cards are selected
         updateView()
+    }
+}
+
+extension UIButton {
+    func hidden() {
+        self.setTitle(nil, for: UIControl.State.normal)
+        self.setAttributedTitle(nil, for: UIControl.State.normal)
+        self.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
     }
 }
