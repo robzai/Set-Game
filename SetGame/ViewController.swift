@@ -80,7 +80,7 @@ class ViewController: UIViewController {
     }
     
     //assemption: shadingOne=▲, shadingTwo=●, shadingThree=■
-    func stringOf(_ card: Card) -> String {
+    func shapeOf(_ card: Card) -> String {
         switch card.shape {
         case .shapeOne:
             return "▲"
@@ -110,7 +110,7 @@ class ViewController: UIViewController {
             .foregroundColor : colorOf(card).withAlphaComponent(alphaOf(card)),
             .strokeColor : colorOf(card)
         ]
-        return NSAttributedString(string: stringOf(card), attributes: attributes)
+        return NSAttributedString(string: "\(shapeOf(card)) \(card.numberOfShapes)", attributes: attributes)
     }
     
     @IBAction func touchMoreCards(_ sender: UIButton) {

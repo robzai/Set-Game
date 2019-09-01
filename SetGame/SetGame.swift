@@ -23,10 +23,44 @@ struct SetGame {
         }
     }
     
-    mutating func isSelectedCardsASet() -> Bool{
-        if let cardOne = selectedCards.popFirst()?.value, let cardTwo = selectedCards.popFirst()?.value, let thirdCard = selectedCards.popFirst()?.value {
-            return cardOne.
+    mutating func handleMatchedCards(_ cardOne: (key: Int, value: Card), _ cardTwo: (key: Int, value: Card), _ cardThree: (key: Int, value: Card)){
+        matchedCards.append(cardOne.value)
+        matchedCards.append(cardTwo.value)
+        matchedCards.append(cardThree.value)
+        playingCards.remove(at: cardOne.key)
+        if let newCard = deck.popLast() {
+            playingCards.insert(newCard, at: cardOne.key)
         }
+        playingCards.remove(at: cardTwo.key)
+        if let newCard = deck.popLast() {
+            playingCards.insert(newCard, at: cardTwo.key)
+        }
+        playingCards.remove(at: cardThree.key)
+        if let newCard = deck.popLast() {
+            playingCards.insert(newCard, at: cardThree.key)
+        }
+        
+    }
+    
+    mutating func isSelectedCardsASet() -> Bool{
+        if let cardOne = selectedCards.popFirst(), let cardTwo = selectedCards.popFirst(), let cardThree = selectedCards.popFirst() {
+            let checkShape: Bool = !(cardOne.value.shape == cardTwo.value.shape || cardTwo.value.shape == cardThree.value.shape || cardThree.value.shape == cardOne.value.shape)
+            
+            let checkNumberOfShape: Bool = !(cardOne.value.numberOfShapes == cardTwo.value.numberOfShapes || cardTwo.value.numberOfShapes == cardThree.value.numberOfShapes || cardThree.value.numberOfShapes == cardOne.value.numberOfShapes)
+            
+            let checkShading: Bool = !(cardOne.value.shading == cardTwo.value.shading || cardTwo.value.shading == cardThree.value.shading || cardThree.value.shading == cardOne.value.shading)
+            
+            let checkColor: Bool = !(cardOne.value.color == cardTwo.value.color || cardTwo.value.color == cardThree.value.color || cardThree.value.color == cardOne.value.color)
+            
+            if (checkShape && checkNumberOfShape && checkShading && checkColor) {
+                print("\(checkShape && checkNumberOfShape && checkShading && checkColor)")
+                handleMatchedCards(cardOne, cardTwo, cardThree)
+                return true
+            } else {
+                return false
+            }
+        }
+        //should never goes here
         return false
     }
 
@@ -34,16 +68,19 @@ struct SetGame {
         //if 0, 1, 2 cards are selected when user choose a card
         if(selectedCards.count < 3) {
             //if the card is already selected, deselect it, else select it
-            if let card = selectedCards.removeValue(forKey: index){
-                playingCards.insert(card, at: index)
+            if let _ = selectedCards.removeValue(forKey: index){
+
             } else {
                 let selectedCard = playingCards[index]
                 selectedCards[index] = selectedCard
             }
+        } else {
+            //if 3 cards are selected when user choose a card, check if selectedCards are match and empty the selectedCards. Then put the new selected card in it.
+            isSelectedCardsASet()
+            let selectedCard = playingCards[index]
+            selectedCards[index] = selectedCard
+            print("\(selectedCards.count)")
         }
-        //if 3 cards are selected when user choose a card, check if selectedCards are match. Then empty the selectedCards and put the new selected card in it.
-        
-        
     }
     
     init() {
