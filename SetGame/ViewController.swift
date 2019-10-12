@@ -14,6 +14,7 @@ class ViewController: UIViewController {
 
     @IBOutlet var cardButtons: [UIButton]!
     @IBOutlet weak var moreCardsButton: UIButton!
+    @IBOutlet weak var scoreLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()

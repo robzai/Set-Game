@@ -15,6 +15,8 @@ struct SetGame {
     //When the deck of Set cards runs out, successfully matched cards can no longer be replaced with new cards. Those un-replaced matched cards can’t appear in the UI. For this reason, your Model’s API will have to reveal which cards have already been successfully matched.
     var matchedCards = [Card]()
     
+    var score = 0
+    
     mutating func pickCards(numberOfCards: Int) {
         for _ in 1...numberOfCards {
             if deck.count > 0{
@@ -78,7 +80,7 @@ struct SetGame {
                 selectedCards[index] = selectedCard
             }
         } else {
-            //if 3 cards are selected when user choose a card, check if selectedCards are match and empty the selectedCards. Then put the new selected card in it.
+            //if 3 cards are selected when user choose a new card, check if selectedCards are match and empty the selectedCards. Then put the new selected card in it.
             isSelectedCardsASet()
             let selectedCard = playingCards[index]
             selectedCards[index] = selectedCard
