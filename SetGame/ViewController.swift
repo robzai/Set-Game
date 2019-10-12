@@ -51,6 +51,8 @@ class ViewController: UIViewController {
             moreCardsButton.isEnabled = false
             moreCardsButton.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         }
+        
+        scoreLabel.text = "Score:\(setGame.score)"
     }
     
     @IBAction func touchCard(_ sender: UIButton) {
@@ -119,9 +121,14 @@ class ViewController: UIViewController {
     
     @IBAction func touchMoreCards(_ sender: UIButton) {
         setGame.pickCards(numberOfCards: 3)
-        //check if 3 selected cards are match, if 3 cards are selected
         updateView()
     }
+    
+    @IBAction func touchNewGame(_ sender: UIButton) {
+        setGame = SetGame()
+        updateView()
+    }
+    
 }
 
 extension UIButton {
@@ -129,5 +136,6 @@ extension UIButton {
         self.setTitle(nil, for: UIControl.State.normal)
         self.setAttributedTitle(nil, for: UIControl.State.normal)
         self.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
+        self.isEnabled = false
     }
 }

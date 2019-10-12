@@ -245,9 +245,8 @@
                                     <action selector="touchMoreCards:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4WG-WX-8nv"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ohO-uU-YlQ">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ohO-uU-YlQ">
                                 <rect key="frame" x="288" y="823" width="106" height="39"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <state key="normal" title="New Game">
@@ -255,11 +254,11 @@
                                 </state>
                                 <connections>
                                     <action selector="touchMoreCards:" destination="BYZ-38-t0r" eventType="touchUpInside" id="UqL-aS-t4s"/>
+                                    <action selector="touchNewGame:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FlG-Ko-VS2"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Score: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ERT-ed-hDV">
-                                <rect key="frame" x="20" y="763" width="97" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Score: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ERT-ed-hDV">
+                                <rect key="frame" x="20" y="782" width="97" height="33"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="27"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -268,7 +267,13 @@
                         <color key="backgroundColor" red="0.1137254902" green="1" blue="0.87450980389999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="pXb-sM-r3e" secondAttribute="bottom" id="0Na-7e-c9K"/>
+                            <constraint firstItem="ohO-uU-YlQ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="pXb-sM-r3e" secondAttribute="trailing" constant="8" symbolic="YES" id="2zt-w1-Qbi"/>
                             <constraint firstItem="pXb-sM-r3e" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="6xR-tv-aup"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ERT-ed-hDV" secondAttribute="trailing" symbolic="YES" id="Ac4-l9-quO"/>
+                            <constraint firstItem="ERT-ed-hDV" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="bFJ-2r-0vE"/>
+                            <constraint firstItem="pXb-sM-r3e" firstAttribute="top" relation="lessThanOrEqual" secondItem="ERT-ed-hDV" secondAttribute="bottom" constant="8" symbolic="YES" id="dl1-BG-Kop"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="ohO-uU-YlQ" secondAttribute="bottom" id="txS-cM-frd"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ohO-uU-YlQ" secondAttribute="trailing" constant="20" id="vuw-4T-v8P"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>

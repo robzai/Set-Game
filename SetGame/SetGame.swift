@@ -17,7 +17,20 @@ struct SetGame {
     
     var score = 0
     
+    mutating func calculateScore(isSet: Bool) {
+        if isSet {
+            score += 6
+        } else {
+            score -= 3
+        }
+    }
+    
     mutating func pickCards(numberOfCards: Int) {
+        //check if 3 selected cards are match, if 3 cards are selected
+        if(selectedCards.count == 3) {
+            calculateScore(isSet: isSelectedCardsASet())
+        }
+        
         for _ in 1...numberOfCards {
             if deck.count > 0{
                 playingCards.append(deck.popLast()!)
@@ -81,7 +94,8 @@ struct SetGame {
             }
         } else {
             //if 3 cards are selected when user choose a new card, check if selectedCards are match and empty the selectedCards. Then put the new selected card in it.
-            isSelectedCardsASet()
+            calculateScore(isSet: isSelectedCardsASet())
+            
             let selectedCard = playingCards[index]
             selectedCards[index] = selectedCard
             print("\(selectedCards.count)")
