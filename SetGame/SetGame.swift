@@ -15,7 +15,8 @@ struct SetGame {
     //When the deck of Set cards runs out, successfully matched cards can no longer be replaced with new cards. Those un-replaced matched cards can’t appear in the UI. For this reason, your Model’s API will have to reveal which cards have already been successfully matched.
     var matchedCards = [Card]()
     
-    var score = 0
+    private(set) var score = 0
+    private(set) var endOfGame = false
     
     mutating func calculateScore(isSet: Bool) {
         if isSet {
@@ -28,7 +29,11 @@ struct SetGame {
     mutating func pickCards(numberOfCards: Int) {
         //check if 3 selected cards are match, if 3 cards are selected
         if(selectedCards.count == 3) {
-            calculateScore(isSet: isSelectedCardsASet())
+            let isSet = isSelectedCardsASet()
+            calculateScore(isSet: isSet)
+            if isSet {
+                endOfGame = checkEndOfGame()
+            }
         }
         
         for _ in 1...numberOfCards {
@@ -62,21 +67,21 @@ struct SetGame {
     
     mutating func isSelectedCardsASet() -> Bool{
         if let cardOne = selectedCards.popFirst(), let cardTwo = selectedCards.popFirst(), let cardThree = selectedCards.popFirst() {
-            let checkShape: Bool = !(cardOne.value.shape == cardTwo.value.shape || cardTwo.value.shape == cardThree.value.shape || cardThree.value.shape == cardOne.value.shape)
-            
-            let checkNumberOfShape: Bool = !(cardOne.value.numberOfShapes == cardTwo.value.numberOfShapes || cardTwo.value.numberOfShapes == cardThree.value.numberOfShapes || cardThree.value.numberOfShapes == cardOne.value.numberOfShapes)
-            
-            let checkShading: Bool = !(cardOne.value.shading == cardTwo.value.shading || cardTwo.value.shading == cardThree.value.shading || cardThree.value.shading == cardOne.value.shading)
-            
-            let checkColor: Bool = !(cardOne.value.color == cardTwo.value.color || cardTwo.value.color == cardThree.value.color || cardThree.value.color == cardOne.value.color)
-            
-            if (checkShape && checkNumberOfShape && checkShading && checkColor) {
-                print("\(checkShape && checkNumberOfShape && checkShading && checkColor)")
+//            let checkShape: Bool = !(cardOne.value.shape == cardTwo.value.shape || cardTwo.value.shape == cardThree.value.shape || cardThree.value.shape == cardOne.value.shape)
+//
+//            let checkNumberOfShape: Bool = !(cardOne.value.numberOfShapes == cardTwo.value.numberOfShapes || cardTwo.value.numberOfShapes == cardThree.value.numberOfShapes || cardThree.value.numberOfShapes == cardOne.value.numberOfShapes)
+//
+//            let checkShading: Bool = !(cardOne.value.shading == cardTwo.value.shading || cardTwo.value.shading == cardThree.value.shading || cardThree.value.shading == cardOne.value.shading)
+//
+//            let checkColor: Bool = !(cardOne.value.color == cardTwo.value.color || cardTwo.value.color == cardThree.value.color || cardThree.value.color == cardOne.value.color)
+
+//            if (checkShape && checkNumberOfShape && checkShading && checkColor) {
+//                print("\(checkShape && checkNumberOfShape && checkShading && checkColor)")
                 handleMatchedCards(cardOne, cardTwo, cardThree)
                 return true
-            } else {
-                return false
-            }
+//            } else {
+//                return false
+//            }
         }
         //should never goes here
         return false
@@ -94,12 +99,21 @@ struct SetGame {
             }
         } else {
             //if 3 cards are selected when user choose a new card, check if selectedCards are match and empty the selectedCards. Then put the new selected card in it.
-            calculateScore(isSet: isSelectedCardsASet())
+            let isSet = isSelectedCardsASet()
+            calculateScore(isSet: isSet)
+            if isSet {
+                endOfGame = checkEndOfGame()
+            }
             
             let selectedCard = playingCards[index]
             selectedCards[index] = selectedCard
             print("\(selectedCards.count)")
         }
+    }
+    
+    mutating func checkEndOfGame() -> Bool {
+        print("matchedCards: \(matchedCards.count)")
+        return matchedCards.count == 81 - 3
     }
     
     init() {

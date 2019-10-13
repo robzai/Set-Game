@@ -13,8 +13,10 @@ class ViewController: UIViewController {
     var setGame = SetGame()
 
     @IBOutlet var cardButtons: [UIButton]!
+    
     @IBOutlet weak var moreCardsButton: UIButton!
     @IBOutlet weak var scoreLabel: UILabel!
+    @IBOutlet weak var foundAllSetLable: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +29,7 @@ class ViewController: UIViewController {
                 if let card: Card = setGame.playingCards[index] {
                     cardButtons[index].setAttributedTitle(contentOfCard(card), for: .normal)
                     cardButtons[index].backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+                    cardButtons[index].isEnabled = true
                 } else {
                     //hendle if the deck is empty then matched cards can’t be replaced, but they should be hidden in the UI.
                     cardButtons[index].hidden()
@@ -44,7 +47,7 @@ class ViewController: UIViewController {
             cardButtons[index].layer.borderColor = UIColor.blue.cgColor
         }
         //handle moreCardButton
-        if setGame.playingCards.count < 24 && setGame.deck.count > 0{
+        if setGame.playingCards.count < 24 && setGame.deck.count > 0 && !setGame.endOfGame{
             moreCardsButton.isEnabled = true
             moreCardsButton.backgroundColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
         } else {
@@ -53,6 +56,8 @@ class ViewController: UIViewController {
         }
         
         scoreLabel.text = "Score:\(setGame.score)"
+        
+        foundAllSetLable.isHidden = !setGame.endOfGame
     }
     
     @IBAction func touchCard(_ sender: UIButton) {
