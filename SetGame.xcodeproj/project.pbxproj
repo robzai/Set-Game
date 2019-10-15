@@ -14,6 +14,8 @@
 		B32DE866230FAE03008BFDB6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B32DE864230FAE03008BFDB6 /* Main.storyboard */; };
 		B32DE868230FAE04008BFDB6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B32DE867230FAE04008BFDB6 /* Assets.xcassets */; };
 		B32DE86B230FAE04008BFDB6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B32DE869230FAE04008BFDB6 /* LaunchScreen.storyboard */; };
+		B387358423557C41009C296D /* PlayingCardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B387358323557C41009C296D /* PlayingCardsView.swift */; };
+		B387358623557CFB009C296D /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = B387358523557CFB009C296D /* Grid.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,8 @@
 		B32DE867230FAE04008BFDB6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B32DE86A230FAE04008BFDB6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B32DE86C230FAE04008BFDB6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B387358323557C41009C296D /* PlayingCardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingCardsView.swift; sourceTree = "<group>"; };
+		B387358523557CFB009C296D /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +75,8 @@
 				B31E34702310A88800814453 /* Supporting files */,
 				B32DE862230FAE03008BFDB6 /* ViewController.swift */,
 				B32DE864230FAE03008BFDB6 /* Main.storyboard */,
+				B387358523557CFB009C296D /* Grid.swift */,
+				B387358323557C41009C296D /* PlayingCardsView.swift */,
 				B32DE86C230FAE04008BFDB6 /* Info.plist */,
 				B31E34712310A8DC00814453 /* Card.swift */,
 				B31E34732310AC2300814453 /* SetGame.swift */,
@@ -153,6 +159,8 @@
 				B31E34722310A8DC00814453 /* Card.swift in Sources */,
 				B31E34742310AC2300814453 /* SetGame.swift in Sources */,
 				B32DE861230FAE03008BFDB6 /* AppDelegate.swift in Sources */,
+				B387358423557C41009C296D /* PlayingCardsView.swift in Sources */,
+				B387358623557CFB009C296D /* Grid.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
