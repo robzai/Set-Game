@@ -47,9 +47,9 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G2h-9C-De5" customClass="PlayingCardsView" customModule="SetGame" customModuleProvider="target">
+                            <view opaque="NO" contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="G2h-9C-De5" customClass="PlayingCardsView" customModule="SetGame" customModuleProvider="target">
                                 <rect key="frame" x="20" y="44" width="335" height="646.66666666666663"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.1137254902" green="1" blue="0.87450980389999999" alpha="1" colorSpace="calibratedRGB"/>

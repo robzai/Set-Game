@@ -45,7 +45,7 @@ struct Grid
         self.frame = frame
         self.layout = layout
         recalculate()
-    }
+    } 
     
     subscript(row: Int, column: Int) -> CGRect? {
         return self[row * dimensions.columnCount + column]
