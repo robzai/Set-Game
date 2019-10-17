@@ -10,15 +10,17 @@ import UIKit
 
 class PlayingCardsView: UIView {
     
-    let numberOfShapesToNumberOfRowColumnDictionary: [Int: (row: Int, col: Int)] = [
+    let numberOfShapesToNumberOfRowColumnDictionary: Dictionary<Int, (row: Int, col: Int)> = [
         1: (3,1),
         2: (5,1),
         3: (3,1)
     ]
-    let insetXForThreeRow: CGFloat = 5.0
-    let insetYForThreeRow: CGFloat = 5.0
-    let insetXForTwoRow: CGFloat = 5.0
-    let insetYForTwoRow: CGFloat = -5.0
+    
+    lazy var drawShapeFunctions: Dictionary<String, (CGRect, UIColor, Int) -> () > = [
+        "oval": drawSingleOval,
+        "diamond": drawSingleDiamond,
+        "squiggle": drawSingleSquiggle
+    ]
     
     private func drawCardBackground(in rect: CGRect) {
         let roundedRect = UIBezierPath(roundedRect: rect, cornerRadius: 16.0)
@@ -26,10 +28,10 @@ class PlayingCardsView: UIView {
         roundedRect.fill()
     }
     
-    private func drawStripe(in rect: CGRect) {
+    private func drawStripe(in rect: CGRect, withColor: UIColor) {
         let path = UIBezierPath()
         path.lineWidth = 1.0
-        UIColor.red.setStroke()
+        withColor.setStroke()
         for i in stride(from: Int(rect.minX), to: Int(rect.maxX), by: 3){
             path.move(to: CGPoint(x: i, y: 0))
             path.addLine(to: CGPoint(x: CGFloat(i), y: rect.maxY))
@@ -42,70 +44,133 @@ class PlayingCardsView: UIView {
             context.saveGState()
             let oval = UIBezierPath(roundedRect: rect, cornerRadius: 50)
             //addClip means I don't want to draw outside the roundedrect
-            oval.addClip()
             withColor.setStroke()
             oval.stroke()
-            drawStripe(in: rect)
+            oval.addClip()
+            drawStripe(in: rect, withColor: withColor)
             context.restoreGState()
         }
     }
     
-    private func drawOval(in rect: CGRect, numberOfOvals: Int){
-        if let row=numberOfShapesToNumberOfRowColumnDictionary[numberOfOvals]?.row, let col=numberOfShapesToNumberOfRowColumnDictionary[numberOfOvals]?.col {
-            let grid = Grid(layout: Grid.Layout.dimensions(rowCount: row, columnCount: col), frame: rect)
+    private func drawSingleDiamond(in rect: CGRect, withColor: UIColor, withShaiding: Int) {
+        if let context = UIGraphicsGetCurrentContext(){
+            context.saveGState()
+            let diamond = UIBezierPath()
+            diamond.move(to: CGPoint(x: rect.midX, y:rect.minY))
+            diamond.addLine(to: CGPoint(x: rect.minX, y: rect.midY))
+            diamond.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
+            diamond.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
+            diamond.close()
+            withColor.setStroke()
+            diamond.stroke()
+            diamond.addClip()
+            drawStripe(in: rect, withColor: withColor)
+            context.restoreGState()
+        }
+    }
+    
+    private func drawSingleSquiggle(in rect: CGRect, withColor: UIColor, withShaiding: Int) {
+        if let context = UIGraphicsGetCurrentContext(){
+            context.saveGState()
+            let squiggle = UIBezierPath()
+            squiggle.move(to: CGPoint(x: rect.minX+(rect.width/6), y: rect.maxY))
+            squiggle.addQuadCurve(to: CGPoint(x: rect.minX, y: rect.midY), controlPoint: CGPoint(x: rect.minX, y: rect.maxY))
             
-            switch numberOfOvals {
+            squiggle.addQuadCurve(to: CGPoint(x: rect.minX+(rect.width/6), y: rect.minY), controlPoint: CGPoint(x: rect.minX, y: rect.minY))
+            
+            squiggle.addCurve(to: CGPoint(x: rect.minX+(rect.width/6)*5, y: rect.minY), controlPoint1: CGPoint(x: rect.minX+(rect.width/6)*2, y: rect.minY), controlPoint2: CGPoint(x: rect.minX+(rect.width/6)*4, y: rect.midY))
+            
+            squiggle.addQuadCurve(to: CGPoint(x: rect.maxX, y: rect.midY), controlPoint: CGPoint(x: rect.maxX, y: rect.minY))
+            
+            squiggle.addQuadCurve(to: CGPoint(x: rect.minX+(rect.width/6)*5, y: rect.maxY), controlPoint: CGPoint(x: rect.maxX, y: rect.maxY))
+            
+            squiggle.addCurve(to: CGPoint(x: rect.minX+(rect.width/6), y: rect.maxY), controlPoint1: CGPoint(x: rect.minX+(rect.width/6)*4, y: rect.maxY), controlPoint2: CGPoint(x: rect.minX+(rect.width/6)*2, y: rect.midY))
+            
+            withColor.setStroke()
+            squiggle.stroke()
+            squiggle.addClip()
+            drawStripe(in: rect, withColor: withColor)
+            context.restoreGState()
+        }
+    }
+    
+    private func drawShapes(in rect: CGRect, _ shape: String, numberOfShapes: Int, color: UIColor, shaiding: Int){
+        if let row=numberOfShapesToNumberOfRowColumnDictionary[numberOfShapes]?.row, let col=numberOfShapesToNumberOfRowColumnDictionary[numberOfShapes]?.col {
+            let grid = Grid(layout: Grid.Layout.dimensions(rowCount: row, columnCount: col), frame: rect)
+
+            switch numberOfShapes {
             case 1:
-                if let rectInGrid = grid[1,0]?.insetBy(dx: insetXForThreeRow, dy: insetYForThreeRow) {
-                    drawSingleOval(in: rectInGrid, withColor: UIColor.red, withShaiding: 0)
+                if let rectInGrid = grid[1,0]?.inset() {
+                    if let drawSingleShapeFunc = drawShapeFunctions[shape]{
+                        drawSingleShapeFunc(rectInGrid, color, 1)
+                    }
                 }
             case 2:
-                if let rectInGrid = grid[1,0]?.insetBy(dx: insetXForTwoRow, dy: insetYForTwoRow),
-                    let anotherRectInGrid = grid[3,0]?.insetBy(dx: insetXForTwoRow, dy: insetYForTwoRow) {
-                    drawSingleOval(in: rectInGrid, withColor: UIColor.red, withShaiding: 0)
-                    drawSingleOval(in: anotherRectInGrid, withColor: UIColor.red, withShaiding: 0)
+                if let rectInGrid = grid[1,0]?.insetForTwoRows(),
+                    let anotherRectInGrid = grid[3,0]?.insetForTwoRows() {
+                    if let drawSingleShapeFunc = drawShapeFunctions[shape]{
+                        drawSingleShapeFunc(rectInGrid, color, 1)
+                        drawSingleShapeFunc(anotherRectInGrid, color, 0)
+                    }
                 }
             case 3:
-                if let rectUpper = grid[0,0]?.insetBy(dx: insetXForThreeRow, dy: insetYForThreeRow),
-                    let rectMiddle = grid[1,0]?.insetBy(dx: insetXForThreeRow, dy: insetYForThreeRow),
-                    let rectBottom = grid[2,0]?.insetBy(dx: insetXForThreeRow, dy: insetYForThreeRow) {
-                    drawSingleOval(in: rectUpper, withColor: UIColor.red, withShaiding: 0)
-                    drawSingleOval(in: rectMiddle, withColor: UIColor.red, withShaiding: 0)
-                    drawSingleOval(in: rectBottom, withColor: UIColor.red, withShaiding: 0)
+                if let rectUpper = grid[0,0]?.inset(),
+                    let rectMiddle = grid[1,0]?.inset(),
+                    let rectBottom = grid[2,0]?.inset() {
+                    if let drawSingleShapeFunc = drawShapeFunctions[shape]{
+                        drawSingleShapeFunc(rectUpper, color, 0)
+                        drawSingleShapeFunc(rectMiddle, color, 0)
+                        drawSingleShapeFunc(rectBottom, color, 0)
+                    }
                 }
             default:
-            break
+                break
+            }
+        }
+    }
+    
+    override func draw(_ rect: CGRect) {
+        
+        var grid = Grid(layout: Grid.Layout.aspectRatio(0.75), frame: bounds)
+        grid.cellCount = 12
+        
+        for i in 1...3 {
+            if let rect = grid[0,i-1]?.inset() {
+                drawCardBackground(in: rect)
+                drawShapes(in: rect, "oval", numberOfShapes: i, color: UIColor.red, shaiding: 0)
+            }
+        }
+
+        for i in 1...3 {
+            if let rect = grid[1,i-1]?.inset() {
+                drawCardBackground(in: rect)
+                drawShapes(in: rect, "diamond", numberOfShapes: i, color: UIColor.blue, shaiding: 0)
+            }
         }
         
+        for i in 1...3 {
+            if let rect = grid[2,i-1]?.inset() {
+                drawCardBackground(in: rect)
+                drawShapes(in: rect, "squiggle", numberOfShapes: i, color: UIColor.orange, shaiding: 0)
+            }
+        }
         
     }
 }
 
-    private func drawSingleDiamond(in rect: CGRect, withColor: UIColor) {
-        let diamond = UIBezierPath()
-        diamond.move(to: CGPoint(x: rect.midX, y:rect.minY))
-        diamond.addLine(to: CGPoint(x: rect.minX, y: rect.midY))
-        diamond.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
-        diamond.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
-        diamond.close()
-        withColor.setStroke()
-        diamond.stroke()
+extension CGRect {
+    private struct Inset {
+        static let insetXForThreeRow: CGFloat = 5.0
+        static let insetYForThreeRow: CGFloat = 5.0
+        static let insetXForTwoRow: CGFloat = 5.0
+        static let insetYForTwoRow: CGFloat = -5.0
     }
     
-    private func drawDiamond(in rect: CGRect){
-
+    func inset() -> CGRect{
+        return self.insetBy(dx: Inset.insetXForThreeRow, dy: Inset.insetYForThreeRow)
     }
     
-    override func draw(_ rect: CGRect) {
-
-            var grid = Grid(layout: Grid.Layout.aspectRatio(0.75), frame: bounds)
-            grid.cellCount = 12
-            
-            for i in 1...3 {
-                if let rect = grid[0,i-1] {
-                    drawCardBackground(in: rect)
-                    drawOval(in: rect, numberOfOvals: i)
-                }
-            }
+    func insetForTwoRows() -> CGRect {
+        return self.insetBy(dx: Inset.insetXForTwoRow, dy: Inset.insetYForTwoRow)
     }
 }
