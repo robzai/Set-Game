@@ -11,12 +11,9 @@ import UIKit
 class ViewController: UIViewController {
     
     var setGame = SetGame()
-
-    @IBOutlet var cardButtons: [UIButton]!
     
     @IBOutlet weak var moreCardsButton: UIButton!
     @IBOutlet weak var scoreLabel: UILabel!
-    @IBOutlet weak var foundAllSetLable: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,60 +66,60 @@ class ViewController: UIViewController {
     }
     
     
-    //assemption: shadingOne=solid, shadingTwo=striped, shadingThree=open.
-    //In an NSAttributedString to be filled in, specify an NSAttributedStringKey.strokeWidth to a negative number
-    func strokeWidthOf(_ card: Card) -> NSNumber {
-        switch card.shading {
-        case .shadingThree:
-            return 5.0
-        default:
-            return -5.0
-        }
-    }
-    
-    //assemption: shadingOne=solid, shadingTwo=striped, shadingThree=open.
-    func alphaOf(_ card: Card) -> CGFloat {
-        switch card.shading {
-        case .shadingTwo:
-            return 0.5
-        default:
-            return 1
-        }
-    }
-    
-    //assemption: shadingOne=▲, shadingTwo=●, shadingThree=■
-    func shapeOf(_ card: Card) -> String {
-        switch card.shape {
-        case .shapeOne:
-            return "▲"
-        case .shapeTow:
-            return "●"
-        case .shapeThree:
-            return "■"
-        }
-    }
-    
-    //eg. red, green, or purple
-    func colorOf(_ card: Card) -> UIColor {
-        switch card.color {
-        case .colorOne:
-            return UIColor.red
-        case .colorTwo:
-            return UIColor.green
-        case .colorThree:
-            return UIColor.purple
-        }
-    }
-    
-    func contentOfCard(_ card: Card) -> NSAttributedString {
-        let attributes: [NSAttributedString.Key: Any] = [
-            .strokeWidth : strokeWidthOf(card),
-            //The opacity value of the color object, specified as a value from 0.0 to 1.0.
-            .foregroundColor : colorOf(card).withAlphaComponent(alphaOf(card)),
-            .strokeColor : colorOf(card)
-        ]
-        return NSAttributedString(string: "\(shapeOf(card)) \(card.numberOfShapes)", attributes: attributes)
-    }
+//    //assemption: shadingOne=solid, shadingTwo=striped, shadingThree=open.
+//    //In an NSAttributedString to be filled in, specify an NSAttributedStringKey.strokeWidth to a negative number
+//    func strokeWidthOf(_ card: Card) -> NSNumber {
+//        switch card.shading {
+//        case .shadingThree:
+//            return 5.0
+//        default:
+//            return -5.0
+//        }
+//    }
+//    
+//    //assemption: shadingOne=solid, shadingTwo=striped, shadingThree=open.
+//    func alphaOf(_ card: Card) -> CGFloat {
+//        switch card.shading {
+//        case .shadingTwo:
+//            return 0.5
+//        default:
+//            return 1
+//        }
+//    }
+//    
+//    //assemption: shadingOne=▲, shadingTwo=●, shadingThree=■
+//    func shapeOf(_ card: Card) -> String {
+//        switch card.shape {
+//        case .shapeOne:
+//            return "▲"
+//        case .shapeTow:
+//            return "●"
+//        case .shapeThree:
+//            return "■"
+//        }
+//    }
+//    
+//    //eg. red, green, or purple
+//    func colorOf(_ card: Card) -> UIColor {
+//        switch card.color {
+//        case .colorOne:
+//            return UIColor.red
+//        case .colorTwo:
+//            return UIColor.green
+//        case .colorThree:
+//            return UIColor.purple
+//        }
+//    }
+//    
+//    func contentOfCard(_ card: Card) -> NSAttributedString {
+//        let attributes: [NSAttributedString.Key: Any] = [
+//            .strokeWidth : strokeWidthOf(card),
+//            //The opacity value of the color object, specified as a value from 0.0 to 1.0.
+//            .foregroundColor : colorOf(card).withAlphaComponent(alphaOf(card)),
+//            .strokeColor : colorOf(card)
+//        ]
+//        return NSAttributedString(string: "\(shapeOf(card)) \(card.numberOfShapes)", attributes: attributes)
+//    }
     
     @IBAction func touchMoreCards(_ sender: UIButton) {
         setGame.pickCards(numberOfCards: 3)

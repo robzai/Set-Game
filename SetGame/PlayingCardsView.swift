@@ -10,13 +10,29 @@ import UIKit
 
 class PlayingCardsView: UIView {
     
-    let numberOfShapesToNumberOfRowColumnDictionary: Dictionary<Int, (row: Int, col: Int)> = [
+    var palyingCards: [Card] = [] {
+        didSet{ setNeedsDisplay(); setNeedsLayout() }
+    }
+    
+    private let shpeToStringDictionary: Dictionary<Card.Shape, String> = [
+        .shapeOne: "diamond",
+        .shapeTwo: "squiggle",
+        .shapeThree: "oval"
+    ]
+    
+    private let numberOfShapesToNumberOfRowColumnDictionary: Dictionary<Int, (row: Int, col: Int)> = [
         1: (3,1),
         2: (5,1),
         3: (3,1)
     ]
     
-    lazy var drawShapeFunctions: Dictionary<String, (CGRect, UIColor, Int) -> () > = [
+    private let colorToUIColorDictionary: Dictionary<Card.Color, UIColor> = [
+        .colorOne: UIColor.red,
+        .colorTwo: UIColor.green,
+        .colorThree: UIColor.purple
+    ]
+    
+    private lazy var drawShapeFunctions: Dictionary<String, (CGRect, UIColor, Int) -> () > = [
         "oval": drawSingleOval,
         "diamond": drawSingleDiamond,
         "squiggle": drawSingleSquiggle
@@ -41,11 +57,11 @@ class PlayingCardsView: UIView {
     
     private func drawSingleOval(in rect: CGRect, withColor: UIColor, withShaiding: Int) {
         if let context = UIGraphicsGetCurrentContext(){
-            context.saveGState()
             let oval = UIBezierPath(roundedRect: rect, cornerRadius: 50)
             //addClip means I don't want to draw outside the roundedrect
             withColor.setStroke()
             oval.stroke()
+            context.saveGState()
             oval.addClip()
             drawStripe(in: rect, withColor: withColor)
             context.restoreGState()
@@ -63,6 +79,7 @@ class PlayingCardsView: UIView {
             diamond.close()
             withColor.setStroke()
             diamond.stroke()
+            context.saveGState()
             diamond.addClip()
             drawStripe(in: rect, withColor: withColor)
             context.restoreGState()
@@ -71,7 +88,6 @@ class PlayingCardsView: UIView {
     
     private func drawSingleSquiggle(in rect: CGRect, withColor: UIColor, withShaiding: Int) {
         if let context = UIGraphicsGetCurrentContext(){
-            context.saveGState()
             let squiggle = UIBezierPath()
             squiggle.move(to: CGPoint(x: rect.minX+(rect.width/6), y: rect.maxY))
             squiggle.addQuadCurve(to: CGPoint(x: rect.minX, y: rect.midY), controlPoint: CGPoint(x: rect.minX, y: rect.maxY))
@@ -88,6 +104,7 @@ class PlayingCardsView: UIView {
             
             withColor.setStroke()
             squiggle.stroke()
+            context.saveGState()
             squiggle.addClip()
             drawStripe(in: rect, withColor: withColor)
             context.restoreGState()
@@ -130,31 +147,15 @@ class PlayingCardsView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        
         var grid = Grid(layout: Grid.Layout.aspectRatio(0.75), frame: bounds)
-        grid.cellCount = 12
+        grid.cellCount = palyingCards.count
         
-        for i in 1...3 {
-            if let rect = grid[0,i-1]?.inset() {
+        for i in 0..<palyingCards.count {
+            if let rect = grid[i]?.inset() {
                 drawCardBackground(in: rect)
-                drawShapes(in: rect, "oval", numberOfShapes: i, color: UIColor.red, shaiding: 0)
+                drawShapes(in: rect, shpeToStringDictionary[palyingCards[i].shape] ?? "", numberOfShapes: palyingCards[i].numberOfShapes, color: colorToUIColorDictionary[palyingCards[i].color] ?? UIColor.white, shaiding: 0)
             }
         }
-
-        for i in 1...3 {
-            if let rect = grid[1,i-1]?.inset() {
-                drawCardBackground(in: rect)
-                drawShapes(in: rect, "diamond", numberOfShapes: i, color: UIColor.blue, shaiding: 0)
-            }
-        }
-        
-        for i in 1...3 {
-            if let rect = grid[2,i-1]?.inset() {
-                drawCardBackground(in: rect)
-                drawShapes(in: rect, "squiggle", numberOfShapes: i, color: UIColor.orange, shaiding: 0)
-            }
-        }
-        
     }
 }
 

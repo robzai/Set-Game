@@ -42,12 +42,12 @@ struct Card: Hashable {
 
 extension Card{
     enum Shape {
-        //eg. diamond, squiggle, stadium
+        //eg. diamond, squiggle, oval
         case shapeOne
-        case shapeTow
+        case shapeTwo
         case shapeThree
         
-        static var all = [Shape.shapeOne, .shapeTow, .shapeThree]
+        static var all = [Shape.shapeOne, .shapeTwo, .shapeThree]
     }
     
     enum Shading {

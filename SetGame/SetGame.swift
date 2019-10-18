@@ -67,21 +67,21 @@ struct SetGame {
     
     mutating func isSelectedCardsASet() -> Bool{
         if let cardOne = selectedCards.popFirst(), let cardTwo = selectedCards.popFirst(), let cardThree = selectedCards.popFirst() {
-//            let checkShape: Bool = !(cardOne.value.shape == cardTwo.value.shape || cardTwo.value.shape == cardThree.value.shape || cardThree.value.shape == cardOne.value.shape)
-//
-//            let checkNumberOfShape: Bool = !(cardOne.value.numberOfShapes == cardTwo.value.numberOfShapes || cardTwo.value.numberOfShapes == cardThree.value.numberOfShapes || cardThree.value.numberOfShapes == cardOne.value.numberOfShapes)
-//
-//            let checkShading: Bool = !(cardOne.value.shading == cardTwo.value.shading || cardTwo.value.shading == cardThree.value.shading || cardThree.value.shading == cardOne.value.shading)
-//
-//            let checkColor: Bool = !(cardOne.value.color == cardTwo.value.color || cardTwo.value.color == cardThree.value.color || cardThree.value.color == cardOne.value.color)
+            let checkShape: Bool = !(cardOne.value.shape == cardTwo.value.shape || cardTwo.value.shape == cardThree.value.shape || cardThree.value.shape == cardOne.value.shape)
 
-//            if (checkShape && checkNumberOfShape && checkShading && checkColor) {
-//                print("\(checkShape && checkNumberOfShape && checkShading && checkColor)")
+            let checkNumberOfShape: Bool = !(cardOne.value.numberOfShapes == cardTwo.value.numberOfShapes || cardTwo.value.numberOfShapes == cardThree.value.numberOfShapes || cardThree.value.numberOfShapes == cardOne.value.numberOfShapes)
+
+            let checkShading: Bool = !(cardOne.value.shading == cardTwo.value.shading || cardTwo.value.shading == cardThree.value.shading || cardThree.value.shading == cardOne.value.shading)
+
+            let checkColor: Bool = !(cardOne.value.color == cardTwo.value.color || cardTwo.value.color == cardThree.value.color || cardThree.value.color == cardOne.value.color)
+
+            if (checkShape && checkNumberOfShape && checkShading && checkColor) {
+                print("\(checkShape && checkNumberOfShape && checkShading && checkColor)")
                 handleMatchedCards(cardOne, cardTwo, cardThree)
                 return true
-//            } else {
-//                return false
-//            }
+            } else {
+                return false
+            }
         }
         //should never goes here
         return false
