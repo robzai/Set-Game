@@ -10,9 +10,11 @@ import UIKit
 
 class PlayingCardsView: UIView {
     
-    var palyingCards: [Card] = [] {
+    var playingCards: [Card] = [] {
         didSet{ setNeedsDisplay(); setNeedsLayout() }
     }
+    
+    var grid: Grid = Grid(layout: Grid.Layout.aspectRatio(0.75))
     
     private let shpeToStringDictionary: Dictionary<Card.Shape, String> = [
         .shapeOne: "diamond",
@@ -32,7 +34,7 @@ class PlayingCardsView: UIView {
         .colorThree: UIColor.purple
     ]
     
-    private lazy var drawShapeFunctions: Dictionary<String, (CGRect, UIColor, Int) -> () > = [
+    private lazy var drawShapeFunctions: Dictionary<String, (CGRect, UIColor, Card.Shading) -> () > = [
         "oval": drawSingleOval,
         "diamond": drawSingleDiamond,
         "squiggle": drawSingleSquiggle
@@ -55,20 +57,25 @@ class PlayingCardsView: UIView {
         path.stroke()
     }
     
-    private func drawSingleOval(in rect: CGRect, withColor: UIColor, withShaiding: Int) {
+    private func drawSingleOval(in rect: CGRect, withColor: UIColor, withShading: Card.Shading) {
         if let context = UIGraphicsGetCurrentContext(){
             let oval = UIBezierPath(roundedRect: rect, cornerRadius: 50)
             //addClip means I don't want to draw outside the roundedrect
             withColor.setStroke()
             oval.stroke()
-            context.saveGState()
-            oval.addClip()
-            drawStripe(in: rect, withColor: withColor)
-            context.restoreGState()
+            if withShading == Card.Shading.shadingOne {
+                withColor.setFill()
+                oval.fill()
+            } else if withShading == Card.Shading.shadingTwo {
+                context.saveGState()
+                oval.addClip()
+                drawStripe(in: rect, withColor: withColor)
+                context.restoreGState()
+            }
         }
     }
     
-    private func drawSingleDiamond(in rect: CGRect, withColor: UIColor, withShaiding: Int) {
+    private func drawSingleDiamond(in rect: CGRect, withColor: UIColor, withShading: Card.Shading) {
         if let context = UIGraphicsGetCurrentContext(){
             context.saveGState()
             let diamond = UIBezierPath()
@@ -79,14 +86,19 @@ class PlayingCardsView: UIView {
             diamond.close()
             withColor.setStroke()
             diamond.stroke()
-            context.saveGState()
-            diamond.addClip()
-            drawStripe(in: rect, withColor: withColor)
-            context.restoreGState()
+            if withShading == Card.Shading.shadingOne {
+                withColor.setFill()
+                diamond.fill()
+            } else if withShading == Card.Shading.shadingTwo {
+                context.saveGState()
+                diamond.addClip()
+                drawStripe(in: rect, withColor: withColor)
+                context.restoreGState()
+            }
         }
     }
     
-    private func drawSingleSquiggle(in rect: CGRect, withColor: UIColor, withShaiding: Int) {
+    private func drawSingleSquiggle(in rect: CGRect, withColor: UIColor, withShading: Card.Shading) {
         if let context = UIGraphicsGetCurrentContext(){
             let squiggle = UIBezierPath()
             squiggle.move(to: CGPoint(x: rect.minX+(rect.width/6), y: rect.maxY))
@@ -104,14 +116,19 @@ class PlayingCardsView: UIView {
             
             withColor.setStroke()
             squiggle.stroke()
-            context.saveGState()
-            squiggle.addClip()
-            drawStripe(in: rect, withColor: withColor)
-            context.restoreGState()
+            if withShading == Card.Shading.shadingOne {
+                withColor.setFill()
+                squiggle.fill()
+            } else if withShading == Card.Shading.shadingTwo {
+                context.saveGState()
+                squiggle.addClip()
+                drawStripe(in: rect, withColor: withColor)
+                context.restoreGState()
+            }
         }
     }
     
-    private func drawShapes(in rect: CGRect, _ shape: String, numberOfShapes: Int, color: UIColor, shaiding: Int){
+    private func drawShapes(in rect: CGRect, _ shape: String, numberOfShapes: Int, color: UIColor, shading: Card.Shading){
         if let row=numberOfShapesToNumberOfRowColumnDictionary[numberOfShapes]?.row, let col=numberOfShapesToNumberOfRowColumnDictionary[numberOfShapes]?.col {
             let grid = Grid(layout: Grid.Layout.dimensions(rowCount: row, columnCount: col), frame: rect)
 
@@ -119,15 +136,15 @@ class PlayingCardsView: UIView {
             case 1:
                 if let rectInGrid = grid[1,0]?.inset() {
                     if let drawSingleShapeFunc = drawShapeFunctions[shape]{
-                        drawSingleShapeFunc(rectInGrid, color, 1)
+                        drawSingleShapeFunc(rectInGrid, color, shading)
                     }
                 }
             case 2:
                 if let rectInGrid = grid[1,0]?.insetForTwoRows(),
                     let anotherRectInGrid = grid[3,0]?.insetForTwoRows() {
                     if let drawSingleShapeFunc = drawShapeFunctions[shape]{
-                        drawSingleShapeFunc(rectInGrid, color, 1)
-                        drawSingleShapeFunc(anotherRectInGrid, color, 0)
+                        drawSingleShapeFunc(rectInGrid, color, shading)
+                        drawSingleShapeFunc(anotherRectInGrid, color, shading)
                     }
                 }
             case 3:
@@ -135,9 +152,9 @@ class PlayingCardsView: UIView {
                     let rectMiddle = grid[1,0]?.inset(),
                     let rectBottom = grid[2,0]?.inset() {
                     if let drawSingleShapeFunc = drawShapeFunctions[shape]{
-                        drawSingleShapeFunc(rectUpper, color, 0)
-                        drawSingleShapeFunc(rectMiddle, color, 0)
-                        drawSingleShapeFunc(rectBottom, color, 0)
+                        drawSingleShapeFunc(rectUpper, color, shading)
+                        drawSingleShapeFunc(rectMiddle, color, shading)
+                        drawSingleShapeFunc(rectBottom, color, shading)
                     }
                 }
             default:
@@ -147,13 +164,13 @@ class PlayingCardsView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        var grid = Grid(layout: Grid.Layout.aspectRatio(0.75), frame: bounds)
-        grid.cellCount = palyingCards.count
+        grid = Grid(layout: Grid.Layout.aspectRatio(0.75), frame: bounds)
+        grid.cellCount = playingCards.count
         
-        for i in 0..<palyingCards.count {
+        for i in 0..<playingCards.count {
             if let rect = grid[i]?.inset() {
                 drawCardBackground(in: rect)
-                drawShapes(in: rect, shpeToStringDictionary[palyingCards[i].shape] ?? "", numberOfShapes: palyingCards[i].numberOfShapes, color: colorToUIColorDictionary[palyingCards[i].color] ?? UIColor.white, shaiding: 0)
+                drawShapes(in: rect, shpeToStringDictionary[playingCards[i].shape] ?? "", numberOfShapes: playingCards[i].numberOfShapes, color: colorToUIColorDictionary[playingCards[i].color] ?? UIColor.white, shading: playingCards[i].shading)
             }
         }
     }

@@ -14,35 +14,20 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var moreCardsButton: UIButton!
     @IBOutlet weak var scoreLabel: UILabel!
+    @IBOutlet weak var playingCardView: PlayingCardsView! {
+        didSet {
+            let tap = UITapGestureRecognizer(target: <#T##Any?#>, action: <#T##Selector?#>)
+            //get the tap location, then use CGRect.contains(CGPoint) to check which rect is selected
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        updateView()
+        updateView()
     }
     
     func updateView() {
-        for index in 0..<cardButtons.count {
-            if index < setGame.playingCards.count {
-                if let card: Card = setGame.playingCards[index] {
-                    cardButtons[index].setAttributedTitle(contentOfCard(card), for: .normal)
-                    cardButtons[index].backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
-                    cardButtons[index].isEnabled = true
-                } else {
-                    //hendle if the deck is empty then matched cards can’t be replaced, but they should be hidden in the UI.
-                    cardButtons[index].hidden()
-                }
-                //handle selection
-                if let _ = setGame.selectedCards.index(forKey: index) {
-                    cardButtons[index].layer.borderWidth = 3.0
-                } else {
-                    cardButtons[index].layer.borderWidth = 0.0
-                }
-            } else {
-                cardButtons[index].hidden()
-            }
-            cardButtons[index].layer.cornerRadius = 8.0
-            cardButtons[index].layer.borderColor = UIColor.blue.cgColor
-        }
+        playingCardView.playingCards = setGame.playingCards as! [Card]
         //handle moreCardButton
         if setGame.playingCards.count < 24 && setGame.deck.count > 0 && !setGame.endOfGame{
             moreCardsButton.isEnabled = true
@@ -54,15 +39,15 @@ class ViewController: UIViewController {
         
         scoreLabel.text = "Score:\(setGame.score)"
         
-        foundAllSetLable.isHidden = !setGame.endOfGame
+//        foundAllSetLable.isHidden = !setGame.endOfGame
     }
     
     @IBAction func touchCard(_ sender: UIButton) {
-        if let cardNumber = cardButtons.firstIndex(of: sender){
-            setGame.chooseCard(at: cardNumber)
-        }
-        updateView()
-        print("\(setGame.selectedCards.count)")
+//        if let cardNumber = cardButtons.firstIndex(of: sender){
+//            setGame.chooseCard(at: cardNumber)
+//        }
+//        updateView()
+//        print("\(setGame.selectedCards.count)")
     }
     
     
