@@ -10,6 +10,7 @@ import Foundation
 
 struct SetGame {
     var deck = [Card]()
+    //selcetedCards is a dictionary of <index/position, the card placed in this position>
     var selectedCards = Dictionary<Int,Card>()
     var playingCards = [Card?]()
     //When the deck of Set cards runs out, successfully matched cards can no longer be replaced with new cards. Those un-replaced matched cards can’t appear in the UI. For this reason, your Model’s API will have to reveal which cards have already been successfully matched.
@@ -76,7 +77,7 @@ struct SetGame {
             let checkColor: Bool = !(cardOne.value.color == cardTwo.value.color || cardTwo.value.color == cardThree.value.color || cardThree.value.color == cardOne.value.color)
 
             if (checkShape && checkNumberOfShape && checkShading && checkColor) {
-                print("\(checkShape && checkNumberOfShape && checkShading && checkColor)")
+                print("found a set!!!")
                 handleMatchedCards(cardOne, cardTwo, cardThree)
                 return true
             } else {
@@ -92,10 +93,11 @@ struct SetGame {
         if(selectedCards.count < 3) {
             //if the card is already selected, deselect it, else select it
             if let _ = selectedCards.removeValue(forKey: index){
-
+                print("number of selected cards: \(selectedCards.count)")
             } else {
                 let selectedCard = playingCards[index]
                 selectedCards[index] = selectedCard
+                print("number of selected cards: \(selectedCards.count)")
             }
         } else {
             //if 3 cards are selected when user choose a new card, check if selectedCards are match and empty the selectedCards. Then put the new selected card in it.
@@ -107,7 +109,7 @@ struct SetGame {
             
             let selectedCard = playingCards[index]
             selectedCards[index] = selectedCard
-            print("\(selectedCards.count)")
+            print("number of selected cards: \(selectedCards.count)")
         }
     }
     

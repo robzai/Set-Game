@@ -71,7 +71,7 @@
                     </view>
                     <connections>
                         <outlet property="moreCardsButton" destination="pXb-sM-r3e" id="e0S-oO-tGh"/>
-                        <outlet property="playingCardView" destination="G2h-9C-De5" id="bOR-gu-0Eo"/>
+                        <outlet property="playingCardsView" destination="G2h-9C-De5" id="bOR-gu-0Eo"/>
                         <outlet property="scoreLabel" destination="ERT-ed-hDV" id="y6N-yC-nQt"/>
                     </connections>
                 </viewController>

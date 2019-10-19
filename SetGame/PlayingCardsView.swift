@@ -14,6 +14,10 @@ class PlayingCardsView: UIView {
         didSet{ setNeedsDisplay(); setNeedsLayout() }
     }
     
+    var selectedCardIndexes: [Int] = [] {
+        didSet { setNeedsDisplay(); setNeedsLayout() }
+    }
+    
     var grid: Grid = Grid(layout: Grid.Layout.aspectRatio(0.75))
     
     private let shpeToStringDictionary: Dictionary<Card.Shape, String> = [
@@ -40,10 +44,17 @@ class PlayingCardsView: UIView {
         "squiggle": drawSingleSquiggle
     ]
     
-    private func drawCardBackground(in rect: CGRect) {
+    private func drawCardBackground(in rect: CGRect, withColor: UIColor) {
         let roundedRect = UIBezierPath(roundedRect: rect, cornerRadius: 16.0)
-        UIColor.white.setFill()
+        withColor.setFill()
         roundedRect.fill()
+    }
+    
+    private func drawCardStroke(in rect: CGRect, withColor: UIColor) {
+        let roundedRect = UIBezierPath(roundedRect: rect, cornerRadius: 16.0)
+        roundedRect.lineWidth = 3.0
+        withColor.setStroke()
+        roundedRect.stroke()
     }
     
     private func drawStripe(in rect: CGRect, withColor: UIColor) {
@@ -169,8 +180,14 @@ class PlayingCardsView: UIView {
         
         for i in 0..<playingCards.count {
             if let rect = grid[i]?.inset() {
-                drawCardBackground(in: rect)
+                drawCardBackground(in: rect, withColor: UIColor.white)
                 drawShapes(in: rect, shpeToStringDictionary[playingCards[i].shape] ?? "", numberOfShapes: playingCards[i].numberOfShapes, color: colorToUIColorDictionary[playingCards[i].color] ?? UIColor.white, shading: playingCards[i].shading)
+            }
+        }
+        
+        for i in selectedCardIndexes {
+            if let rect = grid[i]?.inset() {
+                drawCardStroke(in: rect, withColor: UIColor.blue)
             }
         }
     }
