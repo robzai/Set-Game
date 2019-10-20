@@ -10,8 +10,10 @@ import UIKit
 
 class PlayingCardsView: UIView {
     
-    var playingCards: [Card] = [] {
-        didSet{ setNeedsDisplay(); setNeedsLayout() }
+    var playingCards: [Card?] = [Card?]() {
+        didSet{
+            setNeedsDisplay(); setNeedsLayout()
+        }
     }
     
     var selectedCardIndexes: [Int] = [] {
@@ -181,7 +183,17 @@ class PlayingCardsView: UIView {
         for i in 0..<playingCards.count {
             if let rect = grid[i]?.inset() {
                 drawCardBackground(in: rect, withColor: UIColor.white)
-                drawShapes(in: rect, shpeToStringDictionary[playingCards[i].shape] ?? "", numberOfShapes: playingCards[i].numberOfShapes, color: colorToUIColorDictionary[playingCards[i].color] ?? UIColor.white, shading: playingCards[i].shading)
+                if let shape = playingCards[i]?.shape,
+                    let numberOfShape = playingCards[i]?.numberOfShapes,
+                    let color = playingCards[i]?.color,
+                    let shading = playingCards[i]?.shading
+                {
+                    drawShapes(in: rect,
+                               shpeToStringDictionary[shape] ?? "",
+                               numberOfShapes: numberOfShape,
+                               color: colorToUIColorDictionary[color] ?? UIColor.white,
+                               shading: shading)
+                }
             }
         }
         

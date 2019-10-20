@@ -40,7 +40,7 @@ class ViewController: UIViewController {
     }
     
     func updateView() {
-        playingCardsView.playingCards = setGame.playingCards as! [Card]
+        playingCardsView.playingCards = setGame.playingCards
         playingCardsView.selectedCardIndexes = Array(setGame.selectedCards.keys)
         
         //handle moreCardButton
