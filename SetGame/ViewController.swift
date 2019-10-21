@@ -32,7 +32,7 @@ class ViewController: UIViewController {
             let tapedLocation: CGPoint = sender.location(in: playingCardsView)
             for i in 0..<playingCardsView.grid.cellCount {
                 if let cell = playingCardsView.grid[i], cell.contains(tapedLocation) {
-                    setGame.chooseCard(at: i)
+                    setGame.chooseCard(setGame.playingCards[i])
                 }
             }
         }
@@ -41,7 +41,7 @@ class ViewController: UIViewController {
     
     func updateView() {
         playingCardsView.playingCards = setGame.playingCards
-        playingCardsView.selectedCardIndexes = Array(setGame.selectedCards.keys)
+        playingCardsView.selectedCards = setGame.selectedCards
         
         //handle moreCardButton
         if setGame.playingCards.count < 24 && setGame.deck.count > 0 && !setGame.endOfGame{

@@ -10,14 +10,16 @@ import UIKit
 
 class PlayingCardsView: UIView {
     
-    var playingCards: [Card?] = [Card?]() {
+    var playingCards: [Card] = [Card]() {
         didSet{
             setNeedsDisplay(); setNeedsLayout()
         }
     }
     
-    var selectedCardIndexes: [Int] = [] {
-        didSet { setNeedsDisplay(); setNeedsLayout() }
+    var selectedCards: [Card] = [] {
+        didSet {
+            setNeedsDisplay(); setNeedsLayout()
+        }
     }
     
     var grid: Grid = Grid(layout: Grid.Layout.aspectRatio(0.75))
@@ -183,26 +185,19 @@ class PlayingCardsView: UIView {
         for i in 0..<playingCards.count {
             if let rect = grid[i]?.inset() {
                 drawCardBackground(in: rect, withColor: UIColor.white)
-                if let shape = playingCards[i]?.shape,
-                    let numberOfShape = playingCards[i]?.numberOfShapes,
-                    let color = playingCards[i]?.color,
-                    let shading = playingCards[i]?.shading
-                {
-                    drawShapes(in: rect,
-                               shpeToStringDictionary[shape] ?? "",
-                               numberOfShapes: numberOfShape,
-                               color: colorToUIColorDictionary[color] ?? UIColor.white,
-                               shading: shading)
+                let card = playingCards[i]
+                drawShapes(in: rect,
+                           shpeToStringDictionary[card.shape] ?? "",
+                           numberOfShapes: card.numberOfShapes,
+                           color: colorToUIColorDictionary[card.color] ?? UIColor.white,
+                           shading: card.shading)
+                if selectedCards.contains(playingCards[i]) {
+                    drawCardStroke(in: rect, withColor: UIColor.blue)
                 }
             }
         }
-        
-        for i in selectedCardIndexes {
-            if let rect = grid[i]?.inset() {
-                drawCardStroke(in: rect, withColor: UIColor.blue)
-            }
-        }
     }
+    
 }
 
 extension CGRect {

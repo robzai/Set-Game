@@ -47,7 +47,6 @@ struct SetGame {
         matchedCards.append(cardOne)
         matchedCards.append(cardTwo)
         matchedCards.append(cardThree)
-        
         if let index = playingCards.firstIndex(of: cardOne) {
             playingCards.remove(at: index)
         }
@@ -57,23 +56,28 @@ struct SetGame {
         if let index = playingCards.firstIndex(of: cardThree) {
             playingCards.remove(at: index)
         }
-        
+//        print("# of playing cards: \(playingCards.count)")
         pickCards(numberOfCards: 3)
+//        print("pick 3 more cards")
+//        print("# of playing cards: \(playingCards.count)")
+//        print("# of selected cards: \(selectedCards.count)")
+//        print("============================")
     }
     
     private mutating func isSelectedCardsASet() -> Bool{
+//        print("# of selected cards: \(selectedCards.count)")
         let cardOne = selectedCards.removeFirst()
         let cardTwo = selectedCards.removeFirst()
         let cardThree = selectedCards.removeFirst()
-        
+
         let checkShape: Bool = !(cardOne.shape == cardTwo.shape || cardTwo.shape == cardThree.shape || cardThree.shape == cardOne.shape)
-        
+
         let checkNumberOfShape: Bool = !(cardOne.numberOfShapes == cardTwo.numberOfShapes || cardTwo.numberOfShapes == cardThree.numberOfShapes || cardThree.numberOfShapes == cardOne.numberOfShapes)
-        
+
         let checkShading: Bool = !(cardOne.shading == cardTwo.shading || cardTwo.shading == cardThree.shading || cardThree.shading == cardOne.shading)
-        
+
         let checkColor: Bool = !(cardOne.color == cardTwo.color || cardTwo.color == cardThree.color || cardThree.color == cardOne.color)
-        
+
         if (checkShape && checkNumberOfShape && checkShading && checkColor) {
             print("found a set")
             handleMatchedCards(cardOne, cardTwo, cardThree)
@@ -84,6 +88,7 @@ struct SetGame {
     }
     
     mutating func chooseCard(_ card: Card) {
+        print("# of selected cards: \(selectedCards.count)")
         //if 0, 1, 2 cards are selected when user choose a card
         if(selectedCards.count < 3) {
             //if the card is already selected, deselect it, else select it
@@ -94,19 +99,21 @@ struct SetGame {
             }
         } else {
             //if 3 cards are selected when user choose a new card, check if selectedCards are match and empty the selectedCards(check and empty are done in the function isSelectedCardsASet). Then put the new selected card in it.
-            let isSet = isSelectedCardsASet()
-            calculateScore(isSet: isSet)
-            if isSet {
-                endOfGame = checkEndOfGame()
+            if !selectedCards.contains(card) {
+                let isSet = isSelectedCardsASet()
+                calculateScore(isSet: isSet)
+                if isSet {
+                    endOfGame = checkEndOfGame()
+                }
+                selectedCards.append(card)
             }
-            
-            selectedCards.append(card)
+
         }
-        print("# of selected cards: \(selectedCards.count)")
+//        print("# of selected cards: \(selectedCards.count)")
     }
     
     mutating func checkEndOfGame() -> Bool {
-        print("matchedCards: \(matchedCards.count)")
+//        print("matchedCards: \(matchedCards.count)")
         return matchedCards.count == 81 - 3
     }
     
