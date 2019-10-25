@@ -19,6 +19,13 @@ class ViewController: UIViewController {
             //tap is going to affect the model so it has to be handle by the controller(self)
             let tap = UITapGestureRecognizer(target: self, action: #selector(tapCard))
             playingCardsView.addGestureRecognizer(tap)
+            
+            let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(swipeHandler))
+            swipeDown.direction = UISwipeGestureRecognizer.Direction(arrayLiteral: [.down])
+            playingCardsView.addGestureRecognizer(swipeDown)
+            
+            let rotate = UIRotationGestureRecognizer(target: self, action: #selector(rotationHandler))
+            playingCardsView.addGestureRecognizer(rotate)
         }
     }
     
@@ -39,6 +46,19 @@ class ViewController: UIViewController {
         updateView()
     }
     
+    @objc func swipeHandler(sender: UISwipeGestureRecognizer) {
+        if sender.state == .ended {
+            touchMoreCards(sender)
+        }
+    }
+    
+    @objc func rotationHandler(sender: UIRotationGestureRecognizer) {
+        if sender.state == .ended {
+            setGame.reshuffle()
+            updateView()
+        }
+    }
+    
     func updateView() {
         playingCardsView.playingCards = setGame.playingCards
         playingCardsView.selectedCards = setGame.selectedCards
@@ -57,7 +77,7 @@ class ViewController: UIViewController {
 //        foundAllSetLable.isHidden = !setGame.endOfGame
     }
     
-    @IBAction func touchMoreCards(_ sender: UIButton) {
+    @IBAction func touchMoreCards(_ sender: Any) {
         setGame.pickCards(numberOfCards: 3)
         updateView()
     }

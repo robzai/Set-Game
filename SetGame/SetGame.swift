@@ -113,8 +113,15 @@ struct SetGame {
     }
     
     mutating func checkEndOfGame() -> Bool {
-//        print("matchedCards: \(matchedCards.count)")
         return matchedCards.count == 81 - 3
+    }
+    
+    mutating func reshuffle() {
+        let numberOfPlayingCards = playingCards.count
+        deck.append(contentsOf: playingCards)
+        playingCards.removeAll()
+        deck.shuffle()
+        pickCards(numberOfCards: numberOfPlayingCards)
     }
     
     init() {
